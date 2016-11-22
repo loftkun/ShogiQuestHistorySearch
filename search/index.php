@@ -1,12 +1,17 @@
-<html>
+<!DOCTYPE html>
+<html lang="ja">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>将棋クエスト履歴検索β</title>
 	<link rel="shortcut icon" href="./favicon.ico" />
 
 	<link type="text/css" href="http://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css" rel="stylesheet" />
-	<link type="text/css" href="./css/main.css?20160917" rel="stylesheet">
 
+	<!-- Bootstrap -->
+	<!--meta name="viewport" content="width=device-width, initial-scale=1.0"-->
+	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+	<script src="./js/bootstrap.min.js"></script>
 	<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
 	<script src="./js/ui/jquery.ui.touch-punch.js"></script>
@@ -14,41 +19,47 @@
 	<script src="./js/js-cookie-master/js.cookie.js"></script>
 	<script src="./js/sorter.js"></script>
 	<script src="./js/http.js?20160217"></script>
-	<script src="./js/history.js?20160918_02"></script>
+	<script src="./js/history.js?20161121_01"></script>
 	<script src="./js/quest.js?20160217"></script>
 	<script src="./js/main.js?20160918"></script>
 </head>
 <body>
 <br>
-<div style="font-size:25px">将棋クエスト履歴検索β</div>
-<br>
-<input type="text" id="userId" placeholder="ユーザID" />
-<label><input type="radio" id="rd0" name="rdGType" value="shogi10" checked/>10分</label>
-<label><input type="radio" id="rd1" name="rdGType" value="shogi" />5分</label>
-<label><input type="radio" id="rd2" name="rdGType" value="shogi2" />2分</label>
-<input type="image" id="btnGet" src="./img/btn_search3_1.gif" alt="検索" />
-　<span id="tweet-area"></span>
-<div id="msgBox"></div>
-<!--div id="dbgBox"></div-->
+<div class="container">
+	<!--form class="form-inline"-->
+		<span style="font-size:2.0em">将棋クエスト履歴検索β</span>　
+		<input type="text" id="userId" placeholder="ユーザID" class="form-control" style="height:40px;font-size:1.8em"/>　
 
-<div class="contents">
-	<div class="sample_area sample_area01">
-		<table id="tblHistory" class="clsTblHistory">
+		<label class="radio inline" style="font-size:1.8em"><input type="radio" id="rd0" name="rdGType" value="shogi10" checked/>10分</label>
+		<label class="radio inline" style="font-size:1.8em"><input type="radio" id="rd1" name="rdGType" value="shogi" />5分</label>
+		<label class="radio inline" style="font-size:1.8em"><input type="radio" id="rd2" name="rdGType" value="shogi2" />2分</label>　
+		<button type="button" class="btn btn-primary" id="btnGet" style="width:140px;height:40px;font-size:1.8em;margin-left: auto;">検索</button>
+		<div style="clear:both;">
+			<span id="msgBox"></span>
+			<span id="tweet-area"></span>
+		</div>
+		<!--div id="dbgBox"></div-->
+	<!--/form-->
+</div>
+
+<div class="container">
+	<div class="container">
+		<table id="tblHistory" class="table table-bordered table-hover table-condensed">
 			<thead>
 				<tr>
-					<th width="140">対局日時</th>
-					<th width="40">勝敗</th>
-					<th width="40">手合</th>
-					<th width="40">要因</th>
-					<th width="40">手数</th>
-					<th width="140">先手</th>
-					<th width="60">段級位</th>
-					<th width="40">R</th>
-					<th width="140">後手</th>
-					<th width="60">段級位</th>
-					<th width="40">R</th>
-					<th width="120" class="clsKif">棋譜</th>
-					<th width="40" title="ぴよ将棋で開く">ぴよ<br>将棋</th>
+					<th>対局日時</th>
+					<th>勝敗</th>
+					<th>手合</th>
+					<th>要因</th>
+					<th>手数</th>
+					<th>先手</th>
+					<th>段級位</th>
+					<th>R</th>
+					<th>後手</th>
+					<th>段級位</th>
+					<th>R</th>
+					<th class="clsKif">棋譜</th>
+					<th title="ぴよ将棋で開く">ぴよ<br>将棋</th>
 				</tr>
 			</thead>
 			<tbody id="tblHistory-tbody">
@@ -57,7 +68,7 @@
 	</div>
 	
 	このサイトについて<br><br>
-	<div class="clsInfo">
+	<div>
 		・将棋クエストの対局履歴の検索と棋譜のダウンロードができます。<br>
 		・<b>棋譜のキャッシュが完了しDL可能になるとリンク(clip、csa、ぴよ将棋)が表示されるようになります。</b><br>
 		・clipをクリックすると棋譜ウィンドウが出現しクリップボードにコピーできます。<br>
@@ -67,15 +78,16 @@
 	</div>
 	<br><br>
 	開発履歴<br><br>
-	<div class="clsInfo">
+	<div>
 		2015/05/05 公開<br>
 		2016/02/15 検索結果URLのTwitterつぶやき対応<br>
 		2016/02/16 勝敗、要因、手数表示<br>
 		2016/06/10 手合い表示(平手, 角落ち以外はデータ未確認(その場合生データを表示)。確認次第対応します)<br>
-		2016/09/15 対局履歴のキャッシュを開始<br>
-		2016/09/17 棋譜のキャッシュを開始。棋譜ダウンロードに対応<br>
+		2016/09/15 対局履歴のキャッシュに対応<br>
+		2016/09/17 棋譜ダウンロードに対応<br>
 		2016/09/18 棋譜ウィンドウを追加(棋譜テキストの表示、クリップボードにコピー)<br>
 		2016/09/18 ぴよ将棋で開くリンクを追加<br>
+		2016/11/21 デザイン変更(フォームをやや大きくした)、勝敗で色分け対応。<a href="./index_v1.php">旧デザイン</a><br>
 	</div>
 	<br>
 	<a href="https://twitter.com/share" class="twitter-share-button-template" data-url="http://c-loft.com/shogi/quest/" data-hashtags="将棋 #shogi #ShogiQuest #将棋クエスト" style="display:none;">Tweet</a>
