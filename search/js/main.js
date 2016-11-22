@@ -14,6 +14,8 @@ $(document).ready(function(){
 	//ハンドラ
 	$("#userId").keyup(onKeyUp);
 	$("#btnGet").click(onButtonClick);
+	$("#btnRecent").click(pageRecent);
+	$("#btnAll").click(pageAll);
 	$("#btnKifCopy").click(onButtonClickKifCopy);
 	
 	//検索
@@ -24,6 +26,14 @@ $(document).ready(function(){
 	
 	initBalloon();
 });
+
+var _history;
+var _page = {
+	cnt   : 0,
+	index : 0,
+	range : 30,
+	all   : 0,
+};
 
 //********************************************************************************************
 /**
@@ -106,7 +116,6 @@ function onKeyUp(e){
 	if ( 13 == e.which ){
 		startSearch();
 	}
-	return false;
 }
 
 //********************************************************************************************
@@ -158,10 +167,13 @@ function search(userId, gtype){
 	
 	//表示クリア
 	$('#msgBox').html('');
+	$('#navArea').hide();
 	$('#dbgBox').html('');
 	$('#tblHistory').find("tr:gt(0)").remove();
 	
 	//履歴検索リクエスト
+	_page.cnt   = 0;
+	_page.index = 0;
 	new Quest().getHistory(success, error, userId, gtype);
 }
 
@@ -171,11 +183,20 @@ function search(userId, gtype){
  */
 //********************************************************************************************
 function success(data){
-	var cnt = new History().parse(data);
+
+	_history = new History(data);
+	
+	//表示
+	_page.all = 0;
+	var cnt = _history.parse(_page);
 	if(cnt < 0){
 		$('#msgBox').html("取得に失敗しました\(´・ω・｀\)");
 	}else{
 		$('#msgBox').html(cnt + "件HITしました。");
+		$('#navArea').show();
+		$('#btnRecent').prop("disabled", true);
+		$('#btnAll').prop("disabled", false);
+		_page.cnt = cnt;
 	}
 
 	//tableの見出しクリックによるソート
@@ -199,6 +220,64 @@ function error(){
 	enableGUI();
 }
 
+//********************************************************************************************
+/**
+ * @brief		ページネーション
+ */
+//********************************************************************************************
+function pageHead(){
+	_page.index = 0;
+	_page.all   = 0;
+	paging();
+}
+function pagePrev(){
+	_page.index -= _page.range;
+	if(_page.index < 0){
+		_page.index = 0;
+		return;
+	}
+	_page.all = 0;
+	paging();
+}
+function pageNext(){
+	if(_page.index + _page.range >= _page.cnt){
+		return;
+	}
+	_page.index += _page.range;
+	_page.all = 0;
+	paging();
+}
+function pageTail(){
+	var lastNum = _page.cnt % _page.range;
+	if(lastNum==0){
+		_page.index = _page.cnt - _page.range;
+	}else{
+		_page.index = _page.cnt - lastNum;
+	}
+	_page.all = 0;
+	paging();
+}
+function pageRecent(){
+	pageHead();
+	$('#btnRecent').prop("disabled", true);
+	$('#btnAll').prop("disabled", false);
+}
+function pageAll(){
+	_page.all = 1;
+	paging();
+	$('#btnRecent').prop("disabled", false);
+	$('#btnAll').prop("disabled", true);
+}
+function paging(){
+	$('#tblHistory').find("tr:gt(0)").remove();
+	_history.parse(_page);
+}
+
+//********************************************************************************************
+/**
+ * @brief		balloon初期化
+ */
+//********************************************************************************************
 function initBalloon(){
 	//jquery.balloon.min.js
 	//$('a').balloon({

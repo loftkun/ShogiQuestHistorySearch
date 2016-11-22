@@ -6,18 +6,22 @@
 //********************************************************************************************
 var History = (function() {
 	
-	//デバグ用
-	var _dbg = "";
-
+	//全対局履歴json
+	var _objJSON;
+	
 	//対局種別
 	var _gType = "";
 	
+	//デバグ用
+	var _dbg = "";
+
 	//********************************************************************************************
 	/**
 	 * @brief		コンストラクタ
 	 */
 	//********************************************************************************************
-	var History = function() {
+	var History = function(data) {
+		_objJSON = $.parseJSON(data);
 	};
 
 	var history = History.prototype;
@@ -28,24 +32,30 @@ var History = (function() {
 	 * @param[in]	data				
 	 */
 	//********************************************************************************************
-	history.parse = function(data) {
+	history.parse = function(page) {
 		try{
-			var objJSON = $.parseJSON(data);
-			
 			//ユーザID
-			var userId = objJSON.userId;
+			var userId = _objJSON.userId;
 			
 			//種別
-			_gType = objJSON.gtype;
+			_gType = _objJSON.gtype;
 			//_dbg += userId + " " + _gType + " ";
 			//_dbg += "<br>\n";
 			
 			//履歴
 			var tr = "";
-			var games = objJSON.games;
+			var start,end;
+			if(page.all==0){
+				start = page.index;
+				end   = page.index + page.range - 1;
+			}
+			
+			var games = _objJSON.games;
 			$.each(games, function(i, game) {
-				if(i>10){
-					//return;//こういう感じで非表示にできるので、本メソッドにstartIdx, endIdxを指定するようにして、全gameの内、100件ずつなど任意領域のgameのみを表示できる予定。(ボタンと連動でページ送りのような機能ができる予定)
+				if(page.all==0){
+					if( (i < start) || ( i > end ) ){
+						return;
+					}
 				}
 				parseGame(userId, game);
 				_dbg += "<br>\n";
