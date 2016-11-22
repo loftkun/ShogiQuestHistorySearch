@@ -1,0 +1,188 @@
+@charset "UTF-8";
+/* 共通 */
+@import url(http://fonts.googleapis.com/css?family=Roboto+Condensed);
+body {
+	margin: 0;
+	padding: 0;
+	font-family: "Roboto Condensed", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", "Meiryo", sans-serif;
+	line-height: 1.5;
+	font-weight: normal;
+	color: #444;
+	text-align:center;
+	word-wrap: break-word;
+	overflow-x: visible; }
+	body a {
+		color: #666; }
+	body * {
+		zoom: 1; }
+
+.contents {
+	padding: 0;
+	min-width: 320px; }
+
+h1 {
+	margin: 0 15px 90px;
+	font-size: 20px;
+	font-weight: normal; }
+
+h2 {
+	margin: 0 0 18px;
+	padding-bottom: 3px;
+	font-size: 16px;
+	font-weight: normal;
+	border-bottom: 1px #ccc solid; }
+
+#msgBox {
+	margin: 0;
+	height : 25px;
+}
+
+#kifBox {
+}
+.mini {
+	text-align: left;
+	font-size: 10px;
+}
+
+.txt {
+	margin: 0 15px; }
+
+.sample_area {
+	height: auto;
+	min-height: 100px;
+	margin: 0 15px 60px; }
+
+.clsTblHistory {
+	margin: 0 auto 18px;
+	padding: 0;
+	background-color: #f9f9f9;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	border: 1px #ddd solid;
+	border-spacing: 0; }
+	.clsTblHistory thead {
+		/* background-color: #5cc; */
+		/* color: #fff; */}
+	.clsTblHistory th {
+		margin-bottom: 9px;
+		padding: 9px 15px;
+		/* border-left: 1px #4bb solid; */
+		border-left: 1px #ddd solid;
+		font-weight: normal; }
+		.clsTblHistory th:first-child {
+			border-left-width: 0; }
+	.clsTblHistory tbody {
+		vertical-align: top; }
+		.clsTblHistory tbody td {
+			border-left: 1px #ddd solid; }
+			.clsTblHistory tbody td:first-child {
+				border-left-width: 0; }
+
+.clsTblNav {
+	margin: 0 auto 5px;
+	padding: 0;
+}
+
+.clsInfo {
+	text-align: left;
+	margin-left: auto;
+	margin-right: auto;
+	width: 700px; 
+}
+
+#id_title {
+	font-size: 100px;
+}
+input[type=text]{
+	/* width:200px; */
+	height:30px;
+	font-size:1.2em;
+	vertical-align:middle;
+}
+input[type=radio]{
+	margin: 0px 0px 0px 10px;
+	vertical-align:middle;
+}
+input[type=image]{
+	height:23px;
+	margin: 0px 0px 0px 10px;
+	vertical-align:middle;
+}
+/* モバイル用 */
+@media screen and (max-width: 768px) {
+	body {
+		font-size: 12px; }
+
+	.clsTblHistory {
+		width: 100%; }
+		.clsTblHistory tbody tr {
+			display: block;
+			padding-bottom: 12px; }
+		.clsTblHistory tbody td {
+			display: block;
+			padding: 3px 0;
+			width: 100%;
+			border-left-width: 0; }
+			.clsTblHistory tbody td:before {
+				display: inline-block;
+				vertical-align: middle;
+				*vertical-align: auto;
+				*zoom: 1;
+				*display: inline;
+				margin-right: 5px;
+				color: #888;
+				font-weight: normal; }
+			.clsTblHistory tbody td:nth-of-type(2):before {
+				content: "先手:"; }
+			.clsTblHistory tbody td:nth-of-type(3):before {
+				content: "段級位:"; }
+			.clsTblHistory tbody td:nth-of-type(4):before {
+				content: "R:"; }
+			.clsTblHistory tbody td:nth-of-type(5):before {
+				content: "後手:"; }
+			.clsTblHistory tbody td:nth-of-type(6):before {
+				content: "段級位:"; }
+			.clsTblHistory tbody td:nth-of-type(7):before {
+				content: "R:"; }
+			.clsTblHistory tbody td:nth-of-type(8):before {
+				content: "棋譜URL:"; }
+		.clsTblHistory tbody .title {
+			margin: 0 -15px;
+			padding-right: 15px;
+			padding-left: 15px;
+			margin-bottom: 9px;
+			background-color: #5cc;
+			color: #fff;
+			text-align: center; }
+
+	.sample_area01 th {
+		display: none; }
+	.sample_area01 tr {
+		padding: 0 15px; }
+}
+/* PC用 */
+@media screen and (min-width: 769px) {
+	body {
+		font-size: 14px; }
+
+	.wish_list_mobile {
+		display: none; }
+
+	.clsTblHistory th,
+	.clsTblHistory td {
+		display: table-cell; }
+
+	.clsTblHistory td:before {
+		display: none; }
+
+	.clsTblHistory tr:nth-child(even) {
+		background-color: #eaeaea; }
+	.clsTblHistory td {
+		padding: 9px 15px; }
+		.clsTblHistory td:before {
+			display: none; }
+	.clsTblHistory .date {
+		width: 6em; } }
+
+/*# sourceMappingURL=mogmog.css.map */
