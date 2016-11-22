@@ -1,0 +1,2 @@
+# ShogiQuestHistorySearch
+将棋クエストの対局履歴を検索するWebサービス
