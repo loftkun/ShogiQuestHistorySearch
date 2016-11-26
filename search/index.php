@@ -19,7 +19,7 @@
 	<script src="./js/js-cookie-master/js.cookie.js"></script>
 	<script src="./js/sorter.js"></script>
 	<script src="./js/http.js?20160217"></script>
-	<script src="./js/history.js?20161121_02"></script>
+	<script src="./js/history.js?20161126"></script>
 	<script src="./js/quest.js?20160217"></script>
 	<script src="./js/main.js?20161122"></script>
 </head>

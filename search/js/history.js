@@ -152,6 +152,13 @@ var History = (function() {
 			repetition = true;
 		}
 		
+		//反則
+		var illegal = false;
+		if(finalStatus.indexOf("ILLEGAL") !== -1){//Contains
+			illegal = true;
+		}
+		
+
 		//手数
 		var length = parseInt(game.length);
 		
@@ -202,6 +209,9 @@ var History = (function() {
 		}
 		if(repetition){
 			cause += "千日手";
+		}
+		if(illegal){
+			cause += "反則";
 		}
 		
 		var result = "引き分け";
