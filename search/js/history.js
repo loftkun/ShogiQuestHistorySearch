@@ -48,19 +48,7 @@ var History = (function() {
 		//NVD3.js
 		nv.addGraph(function() {
 		
-			var sin = [],cos = [];
-
-			for (var i = 0; i < 100; i++) {
-				sin.push({x: 1483628054 + i*60*60, y: 1600 * Math.sin(i/10)});
-				cos.push({x: 1483628054+ i*60*60, y: 1600 * Math.cos(i/10)});
-			}
-		
 			var data = [
-				//{
-				//	values: sin,
-				//	key: 'Sine Wave',
-				//	color: '#ff7f0e'
-				//},
 				{
 					values: _plotArray,
 					key: _objJSON.userId,
