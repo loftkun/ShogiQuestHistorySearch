@@ -74,13 +74,17 @@ var History = (function() {
 				//.color(d3.scale.category10().range());
 			//;
 
+			//X軸の単位を決定
+			var timeDiff = ( _plotArray[0].x.getTime() - _plotArray[_plotArray.length-1].x.getTime() ) / 1000;
+			//console.log("[0]=" + _plotArray[0].x.getTime() + " [last]=" + _plotArray[_plotArray.length-1].x.getTime());
+
 			var timeFormat;//https://github.com/d3/d3-time-format
-			if(_plotArray.length > 30){
-				timeFormat = d3.timeFormat("%m/%d");
+			//if(_plotArray.length > 30){
+			if(timeDiff > 60 * 60 * 24){
+				timeFormat = d3.timeFormat("%m/%d");//日付表示
 			}else{
-				timeFormat = d3.timeFormat("%m/%d %H:%M");//TODO 厳密には1日以内なら%H:%Mにする方向で
+				timeFormat = d3.timeFormat("%H:%M");//時刻表示
 			}
-				
 			
 			chart.xAxis
 				.axisLabel('Date')
@@ -91,6 +95,10 @@ var History = (function() {
 				.axisLabel('Rate')
 				.tickFormat(d3.format('d'));//https://github.com/d3/d3-format
 
+			chart.tooltipContent( function(key, x, y){ 
+				return x + ' ' + y;
+			});
+			
 			d3.select('#chart1 svg')
 				.datum(data)
 				.transition().duration(1000)
