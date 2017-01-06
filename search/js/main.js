@@ -11,12 +11,13 @@
  */
 //********************************************************************************************
 $(document).ready(function(){
-	//ハンドラ
+	//コールバック
 	$("#userId").keyup(onKeyUp);
-	$("#btnGet").click(onButtonClick);
+	$("#btnGet").click(onButtonClickGet);
 	$("#btnRecent").click(pageRecent);
 	$("#btnAll").click(pageAll);
 	$("#btnKifCopy").click(onButtonClickKifCopy);
+	$("#btnGraph").click(onButtonClickGraph);
 	
 	//検索
 	trySearch();
@@ -109,7 +110,7 @@ function checkParam(param){
 
 //********************************************************************************************
 /**
- * @brief		keyupハンドラ
+ * @brief		keyupコールバック
  */
 //********************************************************************************************
 function onKeyUp(e){
@@ -120,16 +121,16 @@ function onKeyUp(e){
 
 //********************************************************************************************
 /**
- * @brief		clickハンドラ
+ * @brief		clickコールバック 検索
  */
 //********************************************************************************************
-function onButtonClick(){
+function onButtonClickGet(){
 	startSearch();
 }
 
 //********************************************************************************************
 /**
- * @brief		履歴検索
+ * @brief		検索
  */
 //********************************************************************************************
 function startSearch(){
@@ -147,7 +148,7 @@ function startSearch(){
 
 //********************************************************************************************
 /**
- * @brief		search関数
+ * @brief		検索
  * @author		loft
  *
  * @param[in]	userId
@@ -188,7 +189,8 @@ function success(data){
 	
 	//表示
 	_page.all = 0;
-	var cnt = _history.parse(_page);
+	_history.parse(_page);
+	var cnt = _history.length();
 	if(cnt < 0){
 		$('#msgBox').html("取得に失敗しました\(´・ω・｀\)");
 	}else{
@@ -203,6 +205,9 @@ function success(data){
 	//var tblHistory=new table.sorter("tblHistory");
 	//tblHistory.init();
 	
+	//グラフ描画
+	drawGraph();
+
 	//GUI有効化
 	enableGUI();
 	//initBalloon();
@@ -271,6 +276,9 @@ function pageAll(){
 function paging(){
 	$('#tblHistory').find("tr:gt(0)").remove();
 	_history.parse(_page);
+	
+	//グラフ描画
+	drawGraph();
 }
 
 //********************************************************************************************
@@ -411,6 +419,11 @@ function setTweet(userId, gtype){
 	$.getScript('http://platform.twitter.com/widgets.js');
 }
 
+//********************************************************************************************
+/**
+ * @brief		棋譜ダウンロード開始
+ */
+//********************************************************************************************
 function startDL(thisObj){
 	var http = new Http();
 	var url = "http://tk2-227-23463.vs.sakura.ne.jp/quest/" + thisObj.dataset.kifpath;
@@ -420,8 +433,13 @@ function startDL(thisObj){
 	http.get('./download/', param, onDLsuccess, onDLError);
 }
 
+//********************************************************************************************
+/**
+ * @brief		棋譜ダウンロード成功
+ */
+//********************************************************************************************
 function onDLsuccess(data){
-	//ダイアログとして表示
+	//ダイアログ表示
 	var position;
 	if($('#kifDialog').is(':hidden')){
 		position = {
@@ -440,19 +458,55 @@ function onDLsuccess(data){
 	$('#kifBox').val(data);
 }
 
+//********************************************************************************************
+/**
+ * @brief		棋譜ダウンロード失敗
+ */
+//********************************************************************************************
 function onDLError(){
-	//棋譜ダイアログを表示しないことで失敗を明示
+	//棋譜ダイアログを表示しない
 }
 
 //********************************************************************************************
 /**
- * @brief		clickハンドラ
+ * @brief		clickコールバック クリップボードにコピー
+ *				スマフォは非対応っぽい
  */
 //********************************************************************************************
 function onButtonClickKifCopy(){
 	//棋譜文字列を選択
-	$('#kifBox').select();//select()はスマフォ不可(だけどクリップボードコピーもできないので問題ない)
+	$('#kifBox').select();
 	
 	//クリップボードにコピー
 	document.execCommand("copy");
+}
+
+//********************************************************************************************
+/**
+ * @brief		clickコールバック グラフ描画
+ */
+//********************************************************************************************
+function onButtonClickGraph(){
+	
+	if(!$('#graphDialog').is(':hidden')){
+		return;
+	}
+	$("#graphDialog").dialog({
+		width : "80%"
+	});
+	
+	//グラフ描画
+	drawGraph();
+}
+
+//********************************************************************************************
+/**
+ * @brief		グラフ描画
+ */
+//********************************************************************************************
+function drawGraph(){
+	if($('#graphDialog').is(':hidden')){
+		return;
+	}
+	_history.drawGraph();
 }

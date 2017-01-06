@@ -8,20 +8,29 @@
 	<link type="text/css" href="http://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css" rel="stylesheet" />
 
 	<!-- Bootstrap -->
-	<!--meta name="viewport" content="width=device-width, initial-scale=1.0"-->
 	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<script src="./js/bootstrap/bootstrap.min.js"></script>
 
-	<script src="./js/bootstrap.min.js"></script>
+	<!-- JQuery -->
 	<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
 	<script src="./js/ui/jquery.ui.touch-punch.js"></script>
 	<script src="./js/balloon/jquery.balloon.min.js"></script>
+
 	<script src="./js/js-cookie-master/js.cookie.js"></script>
-	<script src="./js/sorter.js"></script>
+	<!--script src="./js/sorter.js"></script-->
+
+	<!-- d3 -->
+	<link href="http://nvd3.org/assets/css/nv.d3.css" rel="stylesheet" type="text/css">
+	<script src="http://nvd3.org/assets/lib/d3.v3.js"></script>
+	<script src="http://nvd3.org/assets/js/nv.d3.js"></script>
+	<script src="https://d3js.org/d3-time-format.v2.min.js"></script>
+
+	<!-- ShogiQuestHistorySearch -->	
 	<script src="./js/http.js?20160217"></script>
-	<script src="./js/history.js?20161126"></script>
+	<script src="./js/history.js?20170107"></script>
 	<script src="./js/quest.js?20160217"></script>
-	<script src="./js/main.js?20161122"></script>
+	<script src="./js/main.js?20170107"></script>
 </head>
 <body>
 <br>
@@ -39,6 +48,7 @@
 			<span id="navArea" style="display:none">
 				<button type="button" class="btn btn-primary" id="btnRecent" style="width:70px;height:30px;font-size:0.9em;margin-left: auto;" disabled="disabled">最近30</button>
 				<button type="button" class="btn btn-primary" id="btnAll" style="width:70px;height:30px;font-size:0.9em;margin-left: auto;">すべて</button>
+				<button type="button" class="btn btn-success" id="btnGraph" style="width:70px;height:30px;font-size:0.9em;margin-left: auto;">グラフ</button>
 			</span>
 			<span id="tweet-area"></span>
 		</div>
@@ -101,7 +111,7 @@
 	
 	<div id="kifDialog" title="棋譜ウィンドウ" style="display:none">
 		<textarea id="kifBox" rows="10" cols="20">棋譜コピー用</textarea><br>
-		<div class="mini"
+		<div class="mini">
 			<ul>
 				<li>棋譜の形式はCSA形式です。</li>
 				<li>PCの方は<button id="btnKifCopy">copy</button>ボタンでコピーできます。</li>
@@ -109,6 +119,12 @@
 			</ul>
 		</div>
 
+	</div>
+	
+	<div id="graphDialog" title="グラフ" style="display:none">
+		<div id="chart1" style="height:350px;margin:20px 5px 5px 5px">
+			<svg></svg>
+		</div>
 	</div>
 </div>
 </body>

@@ -12,6 +12,9 @@ var History = (function() {
 	//対局種別
 	var _gType = "";
 	
+	//グラフ描画用データ
+	var _plotArray;
+	
 	//デバグ用
 	var _dbg = "";
 
@@ -26,6 +29,98 @@ var History = (function() {
 
 	var history = History.prototype;
 
+	//********************************************************************************************
+	/**
+	 * @brief		全対局数
+	 */
+	//********************************************************************************************
+	history.length = function() {
+		return _objJSON.games.length;
+	}
+	
+	//********************************************************************************************
+	/**
+	 * @brief		グラフ描画
+	 */
+	//********************************************************************************************
+	history.drawGraph = function() {
+
+		//NVD3.js
+		nv.addGraph(function() {
+		
+			var sin = [],cos = [];
+
+			for (var i = 0; i < 100; i++) {
+				sin.push({x: 1483628054 + i*60*60, y: 1600 * Math.sin(i/10)});
+				cos.push({x: 1483628054+ i*60*60, y: 1600 * Math.cos(i/10)});
+			}
+		
+			var data = [
+				//{
+				//	values: sin,
+				//	key: 'Sine Wave',
+				//	color: '#ff7f0e'
+				//},
+				{
+					values: _plotArray,
+					key: _objJSON.userId,
+					color: '#2ca02c'
+				}
+			];
+		
+			var chart = nv.models.lineChart()
+			//var chart = nv.models.lineWithFocusChart()
+				//.margin({left: 100})  //Adjust chart margins to give the x-axis some breathing room.
+				//.useInteractiveGuideline(true)  //We want nice looking tooltips and a guideline!
+				.transitionDuration(0)  //how fast do you want the lines to transition?
+				.showLegend(true)       //Show the legend, allowing users to turn on/off line series.
+				.showYAxis(true)        //Show the y-axis
+				.showXAxis(true)        //Show the x-axis
+			
+			
+			
+			//var chart = nv.models.scatterChart()
+				//.showDistX(true)	//showDist, when true, will display those little distribution lines on the axis.
+				//.showDistY(true)
+				//.transitionDuration(350)
+				//.color(d3.scale.category10().range());
+			//;
+
+			var timeFormat;//https://github.com/d3/d3-time-format
+			if(_plotArray.length > 30){
+				timeFormat = d3.timeFormat("%m/%d");
+			}else{
+				timeFormat = d3.timeFormat("%m/%d %H:%M");//TODO 厳密には1日以内なら%H:%Mにする方向で
+			}
+				
+			
+			chart.xAxis
+				.axisLabel('Date')
+				.tickFormat(timeFormat);
+				//.tickFormat(d3.format('d'));
+
+			chart.yAxis
+				.axisLabel('Rate')
+				.tickFormat(d3.format('d'));//https://github.com/d3/d3-format
+
+			d3.select('#chart1 svg')
+				.datum(data)
+				.transition().duration(1000)
+				.call(chart);
+
+			nv.utils.windowResize(chart.update);
+
+			return chart;
+		},
+		//参考) http://stackoverflow.com/questions/13732971/is-an-nvd3-line-plot-with-markers-possible
+		function() {
+			// this function is called after the chart is added to document
+			d3.selectAll('#chart1 .nv-lineChart .nv-point').style("stroke-width","5px").style("fill-opacity", ".95").style("stroke-opacity", ".95");
+		}
+		
+		);
+	}
+	
 	//********************************************************************************************
 	/**
 	 * @brief		解析(履歴)
@@ -49,7 +144,7 @@ var History = (function() {
 				start = page.index;
 				end   = page.index + page.range - 1;
 			}
-			
+			_plotArray = [];//グラフ描画用データ
 			var games = _objJSON.games;
 			$.each(games, function(i, game) {
 				if(page.all==0){
@@ -57,7 +152,14 @@ var History = (function() {
 						return;
 					}
 				}
-				parseGame(userId, game);
+				gameInfo = parseGame(userId, game);
+				_plotArray.push({
+					x : gameInfo.dateTime,
+					y : gameInfo.oldR,
+					//size: Math.random(),
+					size : 1.0
+					//shape: (Math.random() > 0.95) ? shapes[j % 6] : "circle"  //Configure the shape of each scatter point.
+				});
 				_dbg += "<br>\n";
 			});
 	
@@ -67,11 +169,8 @@ var History = (function() {
 
 			//よって独自の_dbgを表示
 			//$('#dbgBox').html(_dbg);
-			console.log(_dbg);
-			
-			return games.length;//件数
+			//console.log(_dbg);
 		}catch( e ){
-			return -1;
 		}
 	};
 	
@@ -316,6 +415,16 @@ var History = (function() {
 			"</tr>";
 		
 		$('#tblHistory-tbody').append(tr);
+		
+		//グラフ用データを返す
+		var oldR;
+		if(isInitiative){
+			oldR = players[0].oldR;
+		}else{
+			oldR = players[1].oldR;
+		}
+		var gameInfo = { dateTime : dateTime, oldR : oldR };
+		return gameInfo;
 	}
 
 	//********************************************************************************************
@@ -420,7 +529,7 @@ var History = (function() {
 
 	//********************************************************************************************
 	/**
-	 * @brief		棋譜ダウンロードリンク生成
+	 * @brief		ぴよ将棋で開くリンク生成
 	 */
 	//********************************************************************************************
 	function makePiyoLink(url){
