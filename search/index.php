@@ -105,6 +105,7 @@
 		2016/11/21 デザイン変更(スマホ向けに入力項目をやや大きくした)、勝敗で色分け対応(<a href="./index_v1.php">旧デザイン)</a><br>
 		2016/11/21 defaultで最近30件を表示するようにした(表示処理高速化のため)。表示切り替え(30件 or すべて)ボタンを設置した。<br>
 		2016/11/26 要因に"反則"を追加(王手放置等)<br>
+		2017/01/07 グラフ(レート推移)追加<br>
 	</div>
 	<br>
 	<a href="https://twitter.com/share" class="twitter-share-button-template" data-url="http://c-loft.com/shogi/quest/" data-hashtags="将棋 #shogi #ShogiQuest #将棋クエスト" style="display:none;">Tweet</a>
