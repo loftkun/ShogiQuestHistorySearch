@@ -80,7 +80,7 @@ var History = (function() {
 
 			var timeFormat;//https://github.com/d3/d3-time-format
 			//if(_plotArray.length > 30){
-			if(timeDiff > 60 * 60 * 24){
+			if(timeDiff > 60 * 60 * 24 * 2){
 				timeFormat = d3.timeFormat("%m/%d");//日付表示
 			}else{
 				timeFormat = d3.timeFormat("%H:%M");//時刻表示
