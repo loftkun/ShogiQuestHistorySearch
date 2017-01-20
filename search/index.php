@@ -5,7 +5,7 @@
 	<title>将棋クエスト履歴検索β</title>
 	<link rel="shortcut icon" href="./favicon.ico" />
 
-	<link type="text/css" href="http://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css" rel="stylesheet" />
+	<link href="css/main.css?20170118" rel="stylesheet">
 
 	<!-- Bootstrap -->
 	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
@@ -13,10 +13,12 @@
 
 	<!-- JQuery -->
 	<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+	<link type="text/css" href="http://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css" rel="stylesheet" />
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
 	<script src="./js/ui/jquery.ui.touch-punch.js"></script>
 	<script src="./js/balloon/jquery.balloon.min.js"></script>
-
+	
+	<!-- cookie -->
 	<script src="./js/js-cookie-master/js.cookie.js"></script>
 	<!--script src="./js/sorter.js"></script-->
 
@@ -28,9 +30,9 @@
 
 	<!-- ShogiQuestHistorySearch -->	
 	<script src="./js/http.js?20160217"></script>
-	<script src="./js/history.js?20170107"></script>
+	<script src="./js/history.js?20170118"></script>
 	<script src="./js/quest.js?20160217"></script>
-	<script src="./js/main.js?20170107"></script>
+	<script src="./js/main.js?20170118"></script>
 </head>
 <body>
 <br>
@@ -102,10 +104,11 @@
 		2016/09/17 棋譜ダウンロードに対応<br>
 		2016/09/18 棋譜ウィンドウを追加(棋譜テキストの表示、クリップボードにコピー)<br>
 		2016/09/18 ぴよ将棋で開くリンクを追加<br>
-		2016/11/21 デザイン変更(スマホ向けに入力項目をやや大きくした)、勝敗で色分け対応(<a href="./index_v1.php">旧デザイン)</a><br>
+		2016/11/21 デザイン変更(スマホ向けに入力項目をやや大きくした)、勝敗で色分け対応<br>
 		2016/11/21 defaultで最近30件を表示するようにした(表示処理高速化のため)。表示切り替え(30件 or すべて)ボタンを設置した。<br>
 		2016/11/26 要因に"反則"を追加(王手放置等)<br>
 		2017/01/07 グラフ(レート推移)追加<br>
+		2017/01/18 クリックしたリンク(play/clip/csa/ぴよ将棋)には目印(点線囲み)を表示<br>
 	</div>
 	<br>
 	<a href="https://twitter.com/share" class="twitter-share-button-template" data-url="http://c-loft.com/shogi/quest/" data-hashtags="将棋 #shogi #ShogiQuest #将棋クエスト" style="display:none;">Tweet</a>

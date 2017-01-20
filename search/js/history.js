@@ -407,7 +407,7 @@ var History = (function() {
 			"<td>" + rank_g + "</td>" +
 			"<td>" + players[1].oldR + "</td>" +
 			"<td>" + url + "　" + kifClip + "　" + kifLink + "</td>" +
-			"<td>" + piyoLink + "</td>" +
+			"<td style=\"text-align:center;\">" + piyoLink + "</td>" +
 			"</tr>";
 		
 		$('#tblHistory-tbody').append(tr);
@@ -511,7 +511,7 @@ var History = (function() {
 		//var url2  = "http://wars.fm/shogi2/game/" + gameID;
 
 		var url = "http://wars.fm/" + gtype + "/game/" + gameID;
-		return "<a href=\"" + url + "\" target=\"_blank\" title=\"本家で棋譜を見る\">" + "play</a>";
+		return "<a href=\"" + url + "\" target=\"_blank\" onClick=\"onLinkClicked(this)\" title=\"本家で棋譜を見る\">" + "play</a>";
 	};
 	
 	//********************************************************************************************
@@ -520,7 +520,7 @@ var History = (function() {
 	 */
 	//********************************************************************************************
 	function makeKifLink(url){
-		return "<a href=\"" + url + "\" title=\"棋譜ファイルダウンロード\">" + "csa</a>";
+		return "<a href=\"" + url + "\" onClick=\"onLinkClicked(this)\" title=\"棋譜ファイルダウンロード\">" + "csa</a>";
 	};
 
 	//********************************************************************************************
@@ -531,7 +531,7 @@ var History = (function() {
 	function makePiyoLink(url){
 		var piyo = "piyoshogi://?url=";
 		var img  = '<img src="./img/piyo_link.png" width="60">';
-		return "<a href=\"" + piyo + url + "\" title=\"ぴよ将棋で開く\">" + img + "</a>";
+		return "<a href=\"" + piyo + url + "\"  onClick=\"onLinkClicked(this)\" title=\"ぴよ将棋で開く\">" + img + "</a>";
 	};
 	
 	return History;

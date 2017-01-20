@@ -431,6 +431,12 @@ function startDL(thisObj){
 		url: url,
 	};
 	http.get('./download/', param, onDLsuccess, onDLError);
+	
+	$(thisObj).addClass('linkClicked');
+	//$(thisObj).css({
+	//	//fontSize: '16pt',           // 1camelCase形式で指定
+	//	'background-color': 'Orange' //'Lime'  // 2ハイフン形式で指定
+	//});
 }
 
 //********************************************************************************************
@@ -479,6 +485,15 @@ function onButtonClickKifCopy(){
 	
 	//クリップボードにコピー
 	document.execCommand("copy");
+}
+
+//********************************************************************************************
+/**
+ * @brief		clickコールバック リンク
+ */
+//********************************************************************************************
+function onLinkClicked(thisObj){
+	$(thisObj).addClass('linkClicked');
 }
 
 //********************************************************************************************
