@@ -91,7 +91,7 @@
 		・clipをクリックすると棋譜ウィンドウが出現しクリップボードにコピーできます。<br>
 		・<img src="./img/piyo_link.png" width="60" title="ぴよ将棋">をタップすると<a href="http://www.studiok-i.net/android/">ぴよ将棋</a>で開けます(解析が便利！)。インストールはこちら(<a href="https://play.google.com/store/apps/details?id=net.studiok_i.shogi&hl=ja" title="Android版">Android</a>/<a href="https://itunes.apple.com/jp/app/gao-ji-nengde-ben-ge-pai-piyo/id1104881942"  title="iOS版">iOS</a>)から。<br>
 		・本家の仕様変更等に伴い、予告なく運用を停止することがあります。<br>
-		・連絡先：<a href="https://twitter.com/loftkun">@loftkun</a>　<a href="http://c-loft.com/shogi/">その他将棋関連制作物</a><br>
+		・連絡先：<a href="https://twitter.com/loftkun">@loftkun</a>　<a href="http://c-loft.com/shogi/">その他将棋関連制作物</a>　<a href="http://c-loft.com/igo/quest/">囲碁クエスト履歴検索β</a>もあるよ。<br>
 	</div>
 	<br><br>
 	開発履歴<br><br>
