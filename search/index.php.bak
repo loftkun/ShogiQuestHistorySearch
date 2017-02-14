@@ -28,14 +28,11 @@
 	<script src="http://nvd3.org/assets/js/nv.d3.js"></script>
 	<script src="https://d3js.org/d3-time-format.v2.min.js"></script>
 
-	<!-- encodinfg -->
-	<script src="./js/encoding/encoding.min.js"></script>
-
 	<!-- ShogiQuestHistorySearch -->	
 	<script src="./js/http.js?20160217"></script>
-	<script src="./js/history.js?20170214"></script>
+	<script src="./js/history.js?20170118"></script>
 	<script src="./js/quest.js?20160217"></script>
-	<script src="./js/main.js?20170214"></script>
+	<script src="./js/main.js?20170118"></script>
 </head>
 <body>
 <br>
@@ -49,13 +46,11 @@
 		<label class="radio inline" style="font-size:1.8em"><input type="radio" id="rd2" name="rdGType" value="shogi2" />2分</label>　
 		<button type="button" class="btn btn-primary" id="btnGet" style="width:140px;height:40px;font-size:1.8em;margin-left: auto;">検索</button>
 		<div style="clear:both;margin :0 auto 6px">
-			<div id="ad" align="center">2017/2/13 お知らせ ：<a href="http://c-loft.com/blog/?p=2641">AbemaTVのコメントをスクロール表示できる「コメントスクローラー」を公開します。</a></div>
 			<span id="msgBox"></span>
 			<span id="navArea" style="display:none">
 				<button type="button" class="btn btn-primary" id="btnRecent" style="width:70px;height:30px;font-size:0.9em;margin-left: auto;" disabled="disabled">最近30</button>
 				<button type="button" class="btn btn-primary" id="btnAll" style="width:70px;height:30px;font-size:0.9em;margin-left: auto;">すべて</button>
 				<button type="button" class="btn btn-success" id="btnGraph" style="width:70px;height:30px;font-size:0.9em;margin-left: auto;">グラフ</button>
-				<button type="button" class="btn btn-success" id="btnCSV" style="width:70px;height:30px;font-size:0.9em;margin-left: auto;">CSV</button>
 			</span>
 			<span id="tweet-area"></span>
 		</div>
@@ -114,7 +109,6 @@
 		2016/11/26 要因に"反則"を追加(王手放置等)<br>
 		2017/01/07 グラフ(レート推移)追加<br>
 		2017/01/18 クリックしたリンク(play/clip/csa/ぴよ将棋)には目印(点線囲み)を表示<br>
-		2017/02/14 CSVダウンロード機能追加(PC推奨)<br>
 	</div>
 	<br>
 	<a href="https://twitter.com/share" class="twitter-share-button-template" data-url="http://c-loft.com/shogi/quest/" data-hashtags="将棋 #shogi #ShogiQuest #将棋クエスト" style="display:none;">Tweet</a>

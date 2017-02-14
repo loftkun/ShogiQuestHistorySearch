@@ -15,6 +15,9 @@ var History = (function() {
 	//グラフ描画用データ
 	var _plotArray;
 	
+	//CSV
+	var _csv = "";
+
 	//デバグ用
 	var _dbg = "";
 
@@ -80,7 +83,7 @@ var History = (function() {
 
 			var timeFormat;//https://github.com/d3/d3-time-format
 			//if(_plotArray.length > 30){
-			if(timeDiff > 60 * 60 * 24 * 2){
+			if(timeDiff > 60 * 60 * 24 * 3){
 				timeFormat = d3.timeFormat("%m/%d");//日付表示
 			}else{
 				timeFormat = d3.timeFormat("%H:%M");//時刻表示
@@ -119,6 +122,53 @@ var History = (function() {
 	
 	//********************************************************************************************
 	/**
+	 * @brief		CSVダウンロードリンク
+	 */
+	//********************************************************************************************
+	history.csvLink = function() {
+		
+		var name = "shogi-quest.csv";
+		var mimeType = 'text/csv';
+		
+		var a = document.createElement('a');
+		a.download = name;
+		a.target   = '_blank';
+
+		
+		// UTF-8 to SJIS
+		var sjisArray = Encoding.convert(Encoding.stringToCode(_csv), {to: 'SJIS'});
+		
+		if (window.navigator.msSaveBlob) {
+			// for IE
+			var blob  = new Blob([new Uint8Array(sjisArray)], {type: 'text/csv'});//SJIS
+
+			window.navigator.msSaveBlob(blob, name)
+		}
+		else if (window.URL && window.URL.createObjectURL) {
+			// for Firefox
+			var blob  = new Blob([new Uint8Array(sjisArray)], {type: 'text/csv'});//SJIS
+
+			a.href = window.URL.createObjectURL(blob);
+			document.body.appendChild(a);
+			a.click();
+			document.body.removeChild(a);
+		}
+		else if (window.webkitURL && window.webkitURL.createObject) {
+			// for Chrome
+			var blob  = new Blob([new Uint8Array(sjisArray)], {type: 'text/csv'});//SJIS
+
+			a.href = window.webkitURL.createObjectURL(blob);
+			a.click();
+		}
+		else {
+			// for Safari
+			var blob  = new Blob([_csv], {type: 'text/csv'});//Windows以外？とりあえずUTF-8で。
+
+			window.open('data:' + mimeType + ';base64,' + window.Base64.encode(content), '_blank');
+		}
+	}
+	//********************************************************************************************
+	/**
 	 * @brief		解析(履歴)
 	 * @param[in]	data				
 	 */
@@ -141,6 +191,7 @@ var History = (function() {
 				end   = page.index + page.range - 1;
 			}
 			_plotArray = [];//グラフ描画用データ
+			_csv = "";
 			var games = _objJSON.games;
 			$.each(games, function(i, game) {
 				if(page.all==0){
@@ -412,13 +463,53 @@ var History = (function() {
 		
 		$('#tblHistory-tbody').append(tr);
 		
-		//グラフ用データを返す
+		//自分の情報
+		var name;
 		var oldR;
 		if(isInitiative){
+			name = players[0].name;
 			oldR = players[0].oldR;
 		}else{
+			name = players[1].name;
 			oldR = players[1].oldR;
 		}
+		
+		//CSV文字列
+		if(_csv==""){
+			//ヘッダ
+			_csv =	"対局日時" + ","
+					+ name + "のR" + ","
+					+ "勝敗" + ","
+					+ "手合" + ","
+					+ "要因" + ","
+					+ "手数" + ","
+					+ "先手名前" + ","
+					+ "先手段級位" + ","
+					+ "先手R" + ","
+					+ "後手名前" + ","
+					+ "後手段級位" + ","
+					+ "後手R" + ","
+					+ "url" + ","
+					+ "csa"
+					+ "\r\n";
+		}
+		_csv +=   created			+ ","
+				+ oldR				+ ","
+				+ result			+ ","
+				+ handicap			+ ","
+				+ cause				+ ","
+				+ length			+ ","
+				+ players[0].name	+ ","
+				+ rank_s			+ ","
+				+ players[0].oldR	+ ","
+				+ players[1].name	+ ","
+				+ rank_g			+ ","
+				+ players[1].oldR	+ ","
+				+ "http://wars.fm/" + _gType + "/game/" + game.id + ","
+				+ kifURL
+				+ "\r\n";
+		
+		//グラフ用データを返す
 		var gameInfo = { dateTime : dateTime, oldR : oldR };
 		return gameInfo;
 	}

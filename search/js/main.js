@@ -18,6 +18,7 @@ $(document).ready(function(){
 	$("#btnAll").click(pageAll);
 	$("#btnKifCopy").click(onButtonClickKifCopy);
 	$("#btnGraph").click(onButtonClickGraph);
+	$("#btnCSV").click(onButtonClickCSV);
 	
 	//検索
 	trySearch();
@@ -209,6 +210,7 @@ function success(data){
 	drawGraph();
 
 	//GUI有効化
+	$('#ad').hide();
 	enableGUI();
 	//initBalloon();
 }
@@ -512,6 +514,15 @@ function onButtonClickGraph(){
 	
 	//グラフ描画
 	drawGraph();
+}
+
+//********************************************************************************************
+/**
+ * @brief		clickコールバック CSVダウンロード
+ */
+//********************************************************************************************
+function onButtonClickCSV(){
+	_history.csvLink();
 }
 
 //********************************************************************************************
