@@ -209,7 +209,7 @@ var History = (function() {
 				});
 				_dbg += "<br>\n";
 			});
-	
+			
 			//デバグ用にはJSON.stringifyで文字列化したもので十分なはずだが
 			//いまいち綺麗な文字列にならないのでボツ
 			//var strDbg = JSON.stringify(data, null, "    ");
@@ -319,6 +319,8 @@ var History = (function() {
 			handicap = "角";
 		}else if(handicap=="2MAI"){
 			handicap = "二枚";
+		}else if(handicap=="HIKYO"){
+			handicap = "飛香";
 		}else{
 			//他にもいろいろあるが今のところjson未入手なので分からない
 			//しょうがないので生データをそのまま表示する
@@ -492,6 +494,10 @@ var History = (function() {
 					+ "url" + ","
 					+ "csa"
 					+ "\r\n";
+		}
+		
+		if(handicap==""){
+			handicap = "平手";
 		}
 		_csv +=   created			+ ","
 				+ oldR				+ ","
