@@ -321,6 +321,8 @@ var History = (function() {
 			handicap = "二枚";
 		}else if(handicap=="HIKYO"){
 			handicap = "飛香";
+		}else if(handicap=="KYO"){
+			handicap = "香";
 		}else{
 			//他にもいろいろあるが今のところjson未入手なので分からない
 			//しょうがないので生データをそのまま表示する
