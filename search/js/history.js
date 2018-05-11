@@ -6,19 +6,20 @@
 //********************************************************************************************
 var History = (function() {
 	
-	//全対局履歴json
-	var _objJSON;
+	// all history
+	var _allHistory;
 	
-	//対局種別
-	var _gType = "";
+	// graph data
+	var _plot = {
+		arr : [],
+		x   : [],
+		y   : []
+	};
 	
-	//グラフ描画用データ
-	var _plotArray;
-	
-	//CSV
+	// CSV
 	var _csv = "";
 
-	//デバグ用
+	// for debug
 	var _dbg = "";
 
 	//********************************************************************************************
@@ -27,7 +28,7 @@ var History = (function() {
 	 */
 	//********************************************************************************************
 	var History = function(data) {
-		_objJSON = $.parseJSON(data);
+		_allHistory = $.parseJSON(data);
 	};
 
 	var history = History.prototype;
@@ -38,135 +39,10 @@ var History = (function() {
 	 */
 	//********************************************************************************************
 	history.length = function() {
-		return _objJSON.games.length;
+		return _allHistory.games.length;
 	}
 	
-	//********************************************************************************************
-	/**
-	 * @brief		グラフ描画
-	 */
-	//********************************************************************************************
-	history.drawGraph = function() {
 
-		//NVD3.js
-		nv.addGraph(function() {
-		
-			var data = [
-				{
-					values: _plotArray,
-					key: _objJSON.userId,
-					color: '#2ca02c'
-				}
-			];
-		
-			var chart = nv.models.lineChart()
-			//var chart = nv.models.lineWithFocusChart()
-				//.margin({left: 100})  //Adjust chart margins to give the x-axis some breathing room.
-				//.useInteractiveGuideline(true)  //We want nice looking tooltips and a guideline!
-				.transitionDuration(0)  //how fast do you want the lines to transition?
-				.showLegend(true)       //Show the legend, allowing users to turn on/off line series.
-				.showYAxis(true)        //Show the y-axis
-				.showXAxis(true)        //Show the x-axis
-			
-			
-			
-			//var chart = nv.models.scatterChart()
-				//.showDistX(true)	//showDist, when true, will display those little distribution lines on the axis.
-				//.showDistY(true)
-				//.transitionDuration(350)
-				//.color(d3.scale.category10().range());
-			//;
-
-			//X軸の単位を決定
-			var timeDiff = ( _plotArray[0].x.getTime() - _plotArray[_plotArray.length-1].x.getTime() ) / 1000;
-			//console.log("[0]=" + _plotArray[0].x.getTime() + " [last]=" + _plotArray[_plotArray.length-1].x.getTime());
-
-			var timeFormat;//https://github.com/d3/d3-time-format
-			//if(_plotArray.length > 30){
-			if(timeDiff > 60 * 60 * 24 * 3){
-				timeFormat = d3.timeFormat("%m/%d");//日付表示
-			}else{
-				timeFormat = d3.timeFormat("%H:%M");//時刻表示
-			}
-			
-			chart.xAxis
-				.axisLabel('Date')
-				.tickFormat(timeFormat);
-				//.tickFormat(d3.format('d'));
-
-			chart.yAxis
-				.axisLabel('Rate')
-				.tickFormat(d3.format('d'));//https://github.com/d3/d3-format
-
-			chart.tooltipContent( function(key, x, y){ 
-				return x + ' ' + y;
-			});
-			
-			d3.select('#chart1 svg')
-				.datum(data)
-				.transition().duration(1000)
-				.call(chart);
-
-			nv.utils.windowResize(chart.update);
-
-			return chart;
-		},
-		//参考) http://stackoverflow.com/questions/13732971/is-an-nvd3-line-plot-with-markers-possible
-		function() {
-			// this function is called after the chart is added to document
-			d3.selectAll('#chart1 .nv-lineChart .nv-point').style("stroke-width","5px").style("fill-opacity", ".95").style("stroke-opacity", ".95");
-		}
-		
-		);
-	}
-	
-	//********************************************************************************************
-	/**
-	 * @brief		CSVダウンロードリンク
-	 */
-	//********************************************************************************************
-	history.csvLink = function() {
-		
-		var name = "shogi-quest.csv";
-		var mimeType = 'text/csv';
-		
-		var a = document.createElement('a');
-		a.download = name;
-		a.target   = '_blank';
-
-		
-		// UTF-8 to SJIS
-		var sjisArray = Encoding.convert(Encoding.stringToCode(_csv), {to: 'SJIS'});
-		
-		if (window.navigator.msSaveBlob) {
-			// for IE
-			var blob  = new Blob([new Uint8Array(sjisArray)], {type: 'text/csv'});//SJIS
-
-			window.navigator.msSaveBlob(blob, name)
-		}
-		else if (window.URL && window.URL.createObjectURL) {
-			// for Firefox
-			var blob  = new Blob([new Uint8Array(sjisArray)], {type: 'text/csv'});//SJIS
-
-			a.href = window.URL.createObjectURL(blob);
-			document.body.appendChild(a);
-			a.click();
-			document.body.removeChild(a);
-		}
-		else if (window.webkitURL && window.webkitURL.createObject) {
-			// for Chrome
-			var blob  = new Blob([new Uint8Array(sjisArray)], {type: 'text/csv'});//SJIS
-
-			a.href = window.webkitURL.createObjectURL(blob);
-			a.click();
-		}
-		else {
-			// for Safari
-			var blob  = new Blob([_csv], {type: 'text/csv'});//Windows以外？とりあえずUTF-8で。
-
-			window.open('data:' + mimeType + ';base64,' + window.Base64.encode(content), '_blank');
-		}
-	}
 	//********************************************************************************************
 	/**
 	 * @brief		解析(履歴)
@@ -176,11 +52,8 @@ var History = (function() {
 	history.parse = function(page) {
 		try{
 			//ユーザID
-			var userId = _objJSON.userId;
-			
-			//種別
-			_gType = _objJSON.gtype;
-			//_dbg += userId + " " + _gType + " ";
+			var userId = _allHistory.userId;
+			//_dbg += userId + " " + _allHistory.gtype + " ";
 			//_dbg += "<br>\n";
 			
 			//履歴
@@ -190,9 +63,13 @@ var History = (function() {
 				start = page.index;
 				end   = page.index + page.range - 1;
 			}
-			_plotArray = [];//グラフ描画用データ
+			//グラフ描画用データ
+			_plot.arr = [];
+			_plot.x = [];
+			_plot.y = [];
+			
 			_csv = "";
-			var games = _objJSON.games;
+			var games = _allHistory.games;
 			$.each(games, function(i, game) {
 				if(page.all==0){
 					if( (i < start) || ( i > end ) ){
@@ -200,13 +77,14 @@ var History = (function() {
 					}
 				}
 				gameInfo = parseGame(userId, game);
-				_plotArray.push({
+				_plot.arr.push({
 					x : gameInfo.dateTime,
 					y : gameInfo.oldR,
-					//size: Math.random(),
 					size : 1.0
 					//shape: (Math.random() > 0.95) ? shapes[j % 6] : "circle"  //Configure the shape of each scatter point.
 				});
+				_plot.x.push(gameInfo.dateTime.getTime());
+				_plot.y.push(gameInfo.oldR);
 				_dbg += "<br>\n";
 			});
 			
@@ -412,12 +290,13 @@ var History = (function() {
 		var rank_g = getRank(players[1].oldD);
 		
 		//URL文字列
-		var url = makeURL(_gType, game.id);
+		var url = makeURL(_allHistory.gtype, game.id);
 
 		//棋譜
 		var kifTime = dateTimetoKifTimeString(dateTime);
-		var kifPath= userId + '/' + _gType + '/' + userId + '_' + _gType + '_' + kifTime + '.csa';
+		var kifPath= userId + '/' + _allHistory.gtype + '/' + userId + '_' + _allHistory.gtype + '_' + kifTime + '.csa';
 		var kifURL = "http://tk2-227-23463.vs.sakura.ne.jp/quest/" + kifPath;
+		//var kifURL = "http://ec2-54-65-1-162.ap-northeast-1.compute.amazonaws.com/quest/" + kifPath;
 		//var kifURL = "http://160.16.103.217/quest/" + kifPath;
 		
 		//棋譜リンク
@@ -513,7 +392,7 @@ var History = (function() {
 				+ players[1].name	+ ","
 				+ rank_g			+ ","
 				+ players[1].oldR	+ ","
-				+ "http://wars.fm/" + _gType + "/game/" + game.id + ","
+				+ "http://wars.fm/" + _allHistory.gtype + "/game/" + game.id + ","
 				+ kifURL
 				+ "\r\n";
 		
@@ -536,6 +415,68 @@ var History = (function() {
 		_dbg += "<br>\n";
 		_dbg += oldD + " " + oldR + " " + name + " " + oldC;
 	};
+	
+	//********************************************************************************************
+	/**
+	 * @brief		グラフ描画
+	 */
+	//********************************************************************************************
+	history.drawGraph = function() {
+		
+		// plot by NVD3.js
+		//new GraphNVD3().plot(_allHistory.userId, _plot.arr);
+		
+		// plot by BokehJS
+		new GraphBokeh().plot(_allHistory.userId, _plot.x, _plot.y);
+	}
+	
+	//********************************************************************************************
+	/**
+	 * @brief		CSVダウンロードリンク
+	 */
+	//********************************************************************************************
+	history.csvLink = function() {
+		
+		var name = "shogi-quest.csv";
+		var mimeType = 'text/csv';
+		
+		var a = document.createElement('a');
+		a.download = name;
+		a.target   = '_blank';
+
+		
+		// UTF-8 to SJIS
+		var sjisArray = Encoding.convert(Encoding.stringToCode(_csv), {to: 'SJIS'});
+		
+		if (window.navigator.msSaveBlob) {
+			// for IE
+			var blob  = new Blob([new Uint8Array(sjisArray)], {type: 'text/csv'});//SJIS
+
+			window.navigator.msSaveBlob(blob, name)
+		}
+		else if (window.URL && window.URL.createObjectURL) {
+			// for Firefox
+			var blob  = new Blob([new Uint8Array(sjisArray)], {type: 'text/csv'});//SJIS
+
+			a.href = window.URL.createObjectURL(blob);
+			document.body.appendChild(a);
+			a.click();
+			document.body.removeChild(a);
+		}
+		else if (window.webkitURL && window.webkitURL.createObject) {
+			// for Chrome
+			var blob  = new Blob([new Uint8Array(sjisArray)], {type: 'text/csv'});//SJIS
+
+			a.href = window.webkitURL.createObjectURL(blob);
+			a.click();
+		}
+		else {
+			// for Safari
+			var blob  = new Blob([_csv], {type: 'text/csv'});//Windows以外？とりあえずUTF-8で。
+
+			window.open('data:' + mimeType + ';base64,' + window.Base64.encode(content), '_blank');
+		}
+	}
 	
 	//********************************************************************************************
 	/**

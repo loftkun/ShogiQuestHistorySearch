@@ -28,14 +28,26 @@
 	<script src="http://nvd3.org/assets/js/nv.d3.js"></script>
 	<script src="https://d3js.org/d3-time-format.v2.min.js"></script>
 
+	<!-- BokehJS -->
+	<!--link href="http://cdn.pydata.org/bokeh/release/bokeh-0.12.15.min.css" rel="stylesheet"-->
+	<link href="./css/bokehjs/bokeh-0.12.15.min.css?20180511_03" rel="stylesheet">
+	<link href="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.15.min.css" rel="stylesheet">
+	<link href="http://cdn.pydata.org/bokeh/release/bokeh-tables-0.12.15.min.css" rel="stylesheet">
+	<script src="http://cdn.pydata.org/bokeh/release/bokeh-0.12.15.min.js"></script>
+	<script src="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.15.min.js"></script>
+	<script src="http://cdn.pydata.org/bokeh/release/bokeh-tables-0.12.15.min.js"></script>
+	<script src="http://cdn.pydata.org/bokeh/release/bokeh-api-0.12.15.min.js"></script>
+	
 	<!-- encodinfg -->
 	<script src="./js/encoding/encoding.min.js"></script>
 
 	<!-- ShogiQuestHistorySearch -->	
 	<script src="./js/http.js?20160217"></script>
-	<script src="./js/history.js?20170214"></script>
+	<script src="./js/graph-nvd3.js"></script>
+	<script src="./js/graph-bokeh.js?20180511_01"></script>
+	<script src="./js/history.js?20180511_04"></script>
 	<script src="./js/quest.js?20160217"></script>
-	<script src="./js/main.js?20170214"></script>
+	<script src="./js/main.js?20171115_01"></script>
 </head>
 <body>
 <br>
@@ -49,7 +61,6 @@
 		<label class="radio inline" style="font-size:1.8em"><input type="radio" id="rd2" name="rdGType" value="shogi2" />2分</label>　
 		<button type="button" class="btn btn-primary" id="btnGet" style="width:140px;height:40px;font-size:1.8em;margin-left: auto;">検索</button>
 		<div style="clear:both;margin :0 auto 6px">
-			<div id="ad" align="center">2017/2/13 お知らせ ：<a href="http://c-loft.com/blog/?p=2641">AbemaTVのコメントをスクロール表示できる「コメントスクローラー」を公開します。</a></div>
 			<span id="msgBox"></span>
 			<span id="navArea" style="display:none">
 				<button type="button" class="btn btn-primary" id="btnRecent" style="width:70px;height:30px;font-size:0.9em;margin-left: auto;" disabled="disabled">最近30</button>
@@ -60,6 +71,7 @@
 			<span id="tweet-area"></span>
 		</div>
 		<!--div id="dbgBox"></div-->
+		<span id="ad"></span>
 	<!--/form-->
 </div>
 
@@ -96,7 +108,7 @@
 		・clipをクリックすると棋譜ウィンドウが出現しクリップボードにコピーできます。<br>
 		・<img src="./img/piyo_link.png" width="60" title="ぴよ将棋">をタップすると<a href="http://www.studiok-i.net/android/">ぴよ将棋</a>で開けます(解析が便利！)。インストールはこちら(<a href="https://play.google.com/store/apps/details?id=net.studiok_i.shogi&hl=ja" title="Android版">Android</a>/<a href="https://itunes.apple.com/jp/app/gao-ji-nengde-ben-ge-pai-piyo/id1104881942"  title="iOS版">iOS</a>)から。<br>
 		・本家の仕様変更等に伴い、予告なく運用を停止することがあります。<br>
-		・連絡先：<a href="https://twitter.com/loftkun">@loftkun</a>　<a href="http://c-loft.com/shogi/">その他将棋関連制作物</a>　<a href="http://c-loft.com/igo/quest/">囲碁クエスト履歴検索β</a>もあるよ。<br>
+		・連絡先：<a href="https://twitter.com/loftkun">@loftkun</a>　<a href="http://c-loft.com/soft/">その他制作物</a>　<a href="http://c-loft.com/igo/quest/">囲碁クエスト履歴検索β</a>、<a href="http://c-loft.com/renju/quest/">五目クエスト履歴検索β</a>、<a href="http://c-loft.com/reversi/wars/">リバーシ大戦履歴検索β</a>もあるよ。<br>
 	</div>
 	<br><br>
 	開発履歴<br><br>
@@ -132,8 +144,9 @@
 	</div>
 	
 	<div id="graphDialog" title="グラフ" style="display:none">
-		<div id="chart1" style="height:350px;margin:20px 5px 5px 5px">
-			<svg></svg>
+		<div id="chart1">
+			<div id="plot"></div>
+			<svg id="svg_chart1"></svg>
 		</div>
 	</div>
 </div>

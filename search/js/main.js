@@ -398,7 +398,7 @@ function setTweet(userId, gtype){
 	
 	var text = '将棋クエスト履歴検索β';
 	if(userId != null){
-		text += ' ' + userId + 'の棋譜';
+		text += ' ' + userId + 'の棋譜\n';
 	}
 	
 	// remove any previous clone
